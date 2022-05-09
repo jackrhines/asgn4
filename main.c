@@ -20,11 +20,11 @@ int main(int argc, char *argv[]) {
 
 	if (argv[optind] == NULL) {
 		printf("open current directory\n");
-		open_directory(".", 1, hidden, access);
+		print_dir(".", NULL, hidden, access);
 	} else {
 		for ( i = optind; i < argc; ++i) {
 			printf("open %s\n", argv[i]);
-			open_directory(argv[i], 1, hidden, access);
+			print_dir(argv[i], NULL, hidden, access);
 		}
 	}
 
