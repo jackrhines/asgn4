@@ -37,3 +37,16 @@ void open_directory(char *name, int layers, int hidden, int access) {
 	/* close the directory! */
 	return;
 }
+
+int dirsort(const struct dirent **a, const struct dirent **b) {
+    char const *a_name = (*a)->d_name;
+    char const *b_name = (*b)->d_name;    
+
+    if ( ((*a)->d_name)[0] == '.') /* If dir a starts with . */
+        a_name++;
+
+    if ( ((*b)->d_name)[0] == '.') /* If dir b starts with . */
+        b_name++;
+        
+    return strcoll(a_name, b_name);
+}
