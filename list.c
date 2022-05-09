@@ -19,6 +19,8 @@ void add_node(name_list **root, char *name, unsigned char type) {
 
 	temp = *root;
 	while (temp != NULL) {
+
+		/* compare new name to name at current spot */
 		if ((comp = strcmp(name, temp->name)) < 0) {
 			new->next = temp;
 			

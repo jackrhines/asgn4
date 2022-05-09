@@ -17,14 +17,13 @@ int main(int argc, char *argv[]) {
 				break;
 		}
 	}
-
 	if (argv[optind] == NULL) {
-		printf("open current directory\n");
-		open_directory(".", 1, hidden, access);
+		/*printf("open current directory\n");*/
+		print_dir(".", "", "", hidden, access);
 	} else {
 		for ( i = optind; i < argc; ++i) {
-			printf("open %s\n", argv[i]);
-			open_directory(argv[i], 1, hidden, access);
+			/*printf("open %s\n", argv[i]);*/
+			print_dir(argv[i], "", "", hidden, access);
 		}
 	}
 
