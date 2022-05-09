@@ -103,6 +103,12 @@ void print_dir (char *dir_name, char *layer, int hidden, int access) {
         /* Free tmp */
         if (strcmp(tmp, "")) /* If tmp == "", space was not malloced for it */
             free(tmp);
+
+		/* Free namelist */
+		for (i=0; i<n; i++) {
+			free(namelist[i]);
+		}
+		free(namelist);
     }
     else { /* All other file types */
         printf("%s|-- ", layer);

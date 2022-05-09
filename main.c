@@ -19,11 +19,9 @@ int main(int argc, char *argv[]) {
 	}
 
 	if (argv[optind] == NULL) {
-		printf("open current directory\n");
 		print_dir(".", NULL, hidden, access);
 	} else {
 		for ( i = optind; i < argc; ++i) {
-			printf("open %s\n", argv[i]);
 			print_dir(argv[i], NULL, hidden, access);
 		}
 	}
