@@ -37,10 +37,10 @@ void print_dir (char *dir_name, char *layer, int hidden, int acc) {
 		}
         /* Scan directory */
         if (hidden)
-            n = scandir(dir_name, &namelist, NULL, dirsort);
+            n = scandir(dir_name, &namelist, NULL, sort);
 
         else
-            n = scandir(dir_name, &namelist, NULL, alphasort);
+            n = scandir(dir_name, &namelist, NULL, sort);
 
         if (n < 0)
             perror("scandir");
@@ -113,6 +113,10 @@ int dirsort(const struct dirent **a, const struct dirent **b) {
         b_name++;
         
     return strcoll(a_name, b_name);
+}
+
+int sort(const struct dirent **a, const struct dirent **b) {
+    return strcmp((*a)->d_name, (*b)->d_name);
 }
 
 void print_permissions(struct stat *struct_stat) {
