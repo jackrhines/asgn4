@@ -54,11 +54,6 @@ void print_dir (char *dir_name, char *layer, int hidden, int acc) {
         return;
     }
 
-/*	 else if (access(dir_name, X_OK) == -1) {
-		printf("%s [error opening dir]\n", dir_name);
-        return;	
-	}
-*/
     if (((struct_stat.st_mode) & S_IFMT) == S_IFDIR) { /* Directory */
 
 		/* EDGE CASE: Ensure Read & Execute Permissions */

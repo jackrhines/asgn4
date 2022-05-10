@@ -1,0 +1,8 @@
+Names: Jack Rhines & Asa Grote
+
+Instructions:
+	Just call "make" to create the "tree" executable file.
+	Supports "-l", "-la", and "-a" as switches.
+	Switch must come before the remaining non-option arguments
+	
+	run the program with "./tree"
