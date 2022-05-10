@@ -26,12 +26,14 @@ void print_dir (char *dir_name, char *layer, int hidden, int acc) {
 
 		/* EDGE CASE: Ensure Read & Execute Permissions */
 		if (access(dir_name, R_OK) == -1) {
-			printf("%s|-- ", layer);
-        	if (acc) {
-            	printf("[");
-            	print_permissions(&struct_stat);
-            	printf("] ");
-        	}
+			if (layer != NULL) {
+				printf("%s|-- ", layer);
+        		if (acc) {
+            		printf("[");
+            		print_permissions(&struct_stat);
+            		printf("] ");
+        		}
+			}
 			printf("%s [error opening dir]\n", dir_name);
 			return;
 		}
