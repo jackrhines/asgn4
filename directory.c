@@ -54,17 +54,6 @@ void print_dir (char *dir_name, char *layer, int hidden, int acc) {
         return;
     }
 
-	/* EDGE CASE: Ensure Read & Execute Permissions */
-	if (access(dir_name, R_OK) == -1) {
-		printf("%s|-- ", layer);
-        if (acc) {
-            printf("[");
-            print_permissions(&struct_stat);
-            printf("] ");
-        }
-		printf("%s [error opening dir]\n", dir_name);
-		return;
-	}
 /*	 else if (access(dir_name, X_OK) == -1) {
 		printf("%s [error opening dir]\n", dir_name);
         return;	
@@ -72,6 +61,17 @@ void print_dir (char *dir_name, char *layer, int hidden, int acc) {
 */
     if (((struct_stat.st_mode) & S_IFMT) == S_IFDIR) { /* Directory */
 
+		/* EDGE CASE: Ensure Read & Execute Permissions */
+		if (access(dir_name, R_OK) == -1) {
+			printf("%s|-- ", layer);
+        	if (acc) {
+            	printf("[");
+            	print_permissions(&struct_stat);
+            	printf("] ");
+        	}
+			printf("%s [error opening dir]\n", dir_name);
+			return;
+		}
         /* Scan directory */
         if (hidden)
             n = scandir(dir_name, &namelist, NULL, dirsort);
