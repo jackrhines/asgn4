@@ -5,7 +5,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/stat.h>
-#include <fcntl.h>
+#include <ctype.h>
 #include "list.h"
 #include "directory.h"
 
@@ -37,10 +37,10 @@ void print_dir (char *dir_name, char *layer, int hidden, int acc) {
 		}
         /* Scan directory */
         if (hidden)
-            n = scandir(dir_name, &namelist, NULL, sort);
+            n = scandir(dir_name, &namelist, NULL, asort);
 
         else
-            n = scandir(dir_name, &namelist, NULL, sort);
+            n = scandir(dir_name, &namelist, NULL, asort);
 
         if (n < 0)
             perror("scandir");
@@ -117,6 +117,21 @@ int dirsort(const struct dirent **a, const struct dirent **b) {
 
 int sort(const struct dirent **a, const struct dirent **b) {
     return strcmp((*a)->d_name, (*b)->d_name);
+}
+
+int asort(const struct dirent **a, const struct dirent **b) {
+    int ret;
+    char *a_name = strdup((*a)->d_name);
+    char *b_name = strdup((*b)->d_name);
+    if (isalpha(a_name[0]))
+        a_name[0] = tolower(a_name[0]);
+    if (isalpha(b_name[0]))
+        b_name[0] = tolower(b_name[0]);
+    
+    ret = strcmp(a_name, (*b)->d_name);
+    free(a_name);
+    free(b_name);
+    return ret;
 }
 
 void print_permissions(struct stat *struct_stat) {
