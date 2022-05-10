@@ -5,6 +5,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/stat.h>
+#include <fcntl.h>
 #include "list.h"
 #include "directory.h"
 
@@ -40,7 +41,7 @@ void open_directory(char *name, int layers, int hidden, int access) {
 	return;
 }
 
-void print_dir (char *dir_name, char *layer, int hidden, int access) {
+void print_dir (char *dir_name, char *layer, int hidden, int acc) {
     int n; /* Used to keep track of number of subdirectories and files */
     int i; /* Used to iterate through namelist */
     struct stat struct_stat;
@@ -50,9 +51,25 @@ void print_dir (char *dir_name, char *layer, int hidden, int access) {
     /* If directory doesn't exist */
     if ( lstat(dir_name, &struct_stat) == -1 ) {
         perror(dir_name);
-        exit(-1);
+        return;
     }
 
+	/* EDGE CASE: Ensure Read & Execute Permissions */
+	if (access(dir_name, R_OK) == -1) {
+		printf("%s|-- ", layer);
+        if (acc) {
+            printf("[");
+            print_permissions(&struct_stat);
+            printf("] ");
+        }
+		printf("%s [error opening dir]\n", dir_name);
+		return;
+	}
+/*	 else if (access(dir_name, X_OK) == -1) {
+		printf("%s [error opening dir]\n", dir_name);
+        return;	
+	}
+*/
     if (((struct_stat.st_mode) & S_IFMT) == S_IFDIR) { /* Directory */
 
         /* Scan directory */
@@ -64,7 +81,7 @@ void print_dir (char *dir_name, char *layer, int hidden, int access) {
 
         if (n < 0)
             perror("scandir");
-        
+    
         /* Print directory */
         if (layer == NULL) { /* if root directory */
             layer = ""; /* Set layer to empty for following subdirectories */
@@ -76,7 +93,7 @@ void print_dir (char *dir_name, char *layer, int hidden, int access) {
             strncat(tmp, "|   ", 4); /* Add additional layer */
         }
 
-        if (access) {
+        if (acc) {
             printf("[");
             print_permissions(&struct_stat);
             printf("] ");
@@ -93,7 +110,7 @@ void print_dir (char *dir_name, char *layer, int hidden, int access) {
             if ( strcmp(sub_name, ".") && strcmp(sub_name, "..")) {
                 if (sub_name[0] != '.' || hidden) {
                     /* printf("Sub: %s\n", (namelist[i])->d_name); */
-                    print_dir( (namelist[i])->d_name, tmp, hidden, access);
+                    print_dir( (namelist[i])->d_name, tmp, hidden, acc);
                 }
             }
         }
@@ -112,7 +129,7 @@ void print_dir (char *dir_name, char *layer, int hidden, int access) {
     }
     else { /* All other file types */
         printf("%s|-- ", layer);
-        if (access) {
+        if (acc) {
             printf("[");
             print_permissions(&struct_stat);
             printf("] ");
